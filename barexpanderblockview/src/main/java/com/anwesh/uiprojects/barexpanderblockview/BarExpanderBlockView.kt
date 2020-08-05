@@ -200,4 +200,13 @@ class BarExpanderBlockView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : BarExpanderBlockView {
+            val view : BarExpanderBlockView = BarExpanderBlockView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
