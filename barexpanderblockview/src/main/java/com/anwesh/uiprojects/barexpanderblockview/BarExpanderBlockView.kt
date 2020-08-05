@@ -86,7 +86,7 @@ class BarExpanderBlockView(ctx : Context) : View(ctx) {
 
     data class Animator(var view : View, var animated : Boolean = false) {
 
-        fun animated(cb : () -> Unit) {
+        fun animate(cb : () -> Unit) {
             if (animated) {
                 cb()
                 try {
@@ -173,6 +173,29 @@ class BarExpanderBlockView(ctx : Context) : View(ctx) {
 
         fun startUpdating(cb : () -> Unit) {
             curr.startUpdating(cb)
+        }
+    }
+
+    data class Renderer(var view : BarExpanderBlockView) {
+
+        private val animator : Animator = Animator(view)
+        private val beb : BarExpanderBlock = BarExpanderBlock(0)
+        private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+        fun render(canvas : Canvas) {
+            canvas.drawColor(backColor)
+            beb.draw(canvas, paint)
+            animator.animate {
+                beb.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            beb.startUpdating {
+                animator.start()
+            }
         }
     }
 }
